@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/code-doctor-banner.jpg" alt="Code Doctor banner" width="100%">
+</p>
+
 # Code Doctor
 
 Code Doctor is an evidence-backed review, repair, and controlled restructure skill for serious codebases.
