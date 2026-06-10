@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TEXT_SUFFIXES = {".go", ".json", ".md", ".mjs", ".py", ".swift", ".ts", ".yaml"}
+TEXT_SUFFIXES = {".go", ".json", ".md", ".mjs", ".py", ".sh", ".swift", ".ts", ".yaml"}
 TEXT_PATHS = [
     path
     for path in sorted(ROOT.rglob("*"))

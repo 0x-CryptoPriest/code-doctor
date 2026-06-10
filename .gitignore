@@ -1,4 +1,6 @@
 AGENTS.md
+.agents/
+skills-lock.json
 .DS_Store
 __pycache__/
 .pytest_cache/
