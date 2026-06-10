@@ -1,7 +1,7 @@
 interface:
   display_name: "Code Doctor"
-  short_description: "Review, repair, and restructure code"
-  default_prompt: "Use $code-doctor to review, repair, and re-check this change with concise evidence."
+  short_description: "Evidence-backed review and repair with controlled restructuring"
+  default_prompt: "Use $code-doctor to inspect the change, choose the least invasive capable mode, fix real issues when requested, validate locally, and report concise evidence."
 
 policy:
   allow_implicit_invocation: true

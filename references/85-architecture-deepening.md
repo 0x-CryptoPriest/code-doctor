@@ -19,6 +19,8 @@ Use this file when code is correct but the structure makes change, testing, or r
 - A new interface or adapter has only one real implementation and no concrete test or runtime variation.
 - A pure helper was extracted for testability, but the bug risk lives in how every caller invokes it.
 
+Treat these as signals, not permission. Architecture work still needs a concrete change risk and a bounded validation path.
+
 ## Checks
 - Deletion test: if deleting the module removes complexity, it was shallow; if complexity reappears across callers, it was useful.
 - Interface test: callers and tests should prove behavior through the same public interface.
@@ -38,3 +40,11 @@ Use this file when code is correct but the structure makes change, testing, or r
 - Do not hide behavior that callers legitimately need to control.
 - Do not rewrite broad architecture during a narrow bug fix unless the current structure blocks a correct fix.
 - Preserve public behavior unless the intent says to change it.
+- Default to proposing architecture work when the user requested review; implement only with clear authorization or when it blocks the requested repair.
+- Prefer reducing caller knowledge over adding layers.
+- Stop when the remaining work would require a new module boundary, data model change, migration, or cross-team decision.
+
+## Output notes
+- State the old caller knowledge and the new smaller interface.
+- State which behavior moved behind the interface.
+- State which tests were preserved, moved, or added to prove the public behavior.

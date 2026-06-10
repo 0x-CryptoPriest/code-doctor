@@ -11,6 +11,8 @@ Preserve every existing capability while improving:
 - brevity
 - testability
 
+Use this pass only after a real structure problem is proven. Do not run it because the code merely looks imperfect.
+
 ## Default moves
 - Extract duplicated logic into one helper.
 - Move repeated validation or formatting into a shared function.
@@ -18,6 +20,7 @@ Preserve every existing capability while improving:
 - Replace ad hoc branching with a clearer data flow.
 - Prefer the shorter implementation if it is equally safe and easier to verify.
 - If repeated caller logic exists, move it behind the module interface instead of copying fixes across callers.
+- Delete dead or redundant code only after checking reachable behavior, tests, migrations, and public contracts.
 
 ## Function review
 For each function, ask:
@@ -42,8 +45,11 @@ If caller knowledge is high or behavior is scattered, use `references/85-archite
 - Do not change public behavior unless the task explicitly allows it.
 - Do not broaden the scope just to make code look elegant.
 - Keep refactors local and reviewable.
+- Do not introduce a new abstraction unless it removes real duplication, hides real caller knowledge, or matches a local pattern.
+- Prefer one verified small restructure over many speculative cleanups.
 
 ## After restructure
 - Rebuild the project intent map.
 - Re-run the relevant tests and checks.
 - Verify that no public behavior regressed.
+- Summarize what behavior stayed the same and which caller knowledge decreased.
