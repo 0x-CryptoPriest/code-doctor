@@ -11,6 +11,7 @@ TEXT_PATHS = [
     for path in sorted(ROOT.rglob("*"))
     if path.is_file()
     and path.name != "AGENTS.md"
+    and path.name != "README.md"
     and ".git" not in path.parts
     and "__pycache__" not in path.parts
     and ".build" not in path.parts
