@@ -118,6 +118,175 @@ The user does not need to choose these modes manually. They exist so the agent c
 
 The default rule is: choose the least invasive mode that satisfies the request.
 
+## Processing Flowchart
+
+The following LaTeX/TikZ diagram shows the high-level Code Doctor workflow.
+
+```tex
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric}
+
+\begin{document}
+
+\begin{tikzpicture}[
+  node distance=9mm and 16mm,
+  font=\small,
+  box/.style={
+    rectangle,
+    rounded corners=3pt,
+    draw=black!65,
+    fill=gray!6,
+    align=center,
+    minimum width=35mm,
+    minimum height=9mm
+  },
+  decision/.style={
+    diamond,
+    aspect=1.8,
+    draw=black!70,
+    fill=blue!6,
+    align=center,
+    inner sep=1.5pt
+  },
+  strong/.style={
+    rectangle,
+    rounded corners=3pt,
+    draw=black!75,
+    fill=green!8,
+    align=center,
+    minimum width=42mm,
+    minimum height=9mm
+  },
+  warn/.style={
+    rectangle,
+    rounded corners=3pt,
+    draw=black!75,
+    fill=orange!10,
+    align=center,
+    minimum width=42mm,
+    minimum height=9mm
+  },
+  arrow/.style={-Latex, thick, draw=black!70}
+]
+
+\node[box] (start) {User request\\Review / Fix / Repair / Architecture};
+\node[decision, below=of start] (mode) {Choose least\\invasive mode};
+
+\node[box, below left=of mode] (review) {review-only\\Report, do not edit};
+\node[box, below=of mode] (repair) {repair / restructure\\Smallest safe fix};
+\node[box, below right=of mode] (arch) {architecture / security\\Candidates first};
+
+\node[strong, below=16mm of repair] (intent) {
+Build Intent Map\\
+Request Intent + Project Role Intent
+};
+
+\node[box, below=of intent] (inspect) {
+Inspect diff / touched files / nearby code\\
+Callers, data flow, runtime entry points
+};
+
+\node[box, below=of inspect] (refs) {
+Load focused references\\
+Language / Tests / Security / Repair / Architecture
+};
+
+\node[decision, below=of refs] (finding) {
+Any real\\issue?
+};
+
+\node[box, left=of finding] (clean) {
+No high-signal issue\\
+Report residual risk / test gaps
+};
+
+\node[decision, below=of finding] (gate) {
+Fix Gate\\
+Evidence + Impact + Smallest fix + Validation
+};
+
+\node[warn, right=of gate] (defer) {
+Weak evidence\\
+Question / Deferred / Residual Risk
+};
+
+\node[box, below=of gate] (patch) {
+Apply smallest safe change\\
+Do not touch unrelated dirty changes
+};
+
+\node[box, below=of patch] (validate) {
+Run relevant validation\\
+test / lint / typecheck / build / screenshot
+};
+
+\node[decision, below=of validate] (again) {
+Any issue\\
+after validation?
+};
+
+\node[strong, below=of again] (converge) {
+Convergence Pass\\
+Reviewed / Not reviewed / Second-pass check
+};
+
+\node[box, below=of converge] (report) {
+Final report\\
+Intent + Mode + Findings + Repair summary + Validation
+};
+
+\node[warn, right=23mm of refs] (archchecks) {
+Architecture checks\\
+Deletion Test\\
+Interface-as-test-surface\\
+Adapter Reality Check\\
+Locality / Leverage
+};
+
+\node[warn, right=23mm of archchecks] (candidate) {
+Broad architecture work\\
+Propose candidates first\\
+Strong / Worth exploring / Speculative
+};
+
+\draw[arrow] (start) -- (mode);
+\draw[arrow] (mode) -- (review);
+\draw[arrow] (mode) -- (repair);
+\draw[arrow] (mode) -- (arch);
+
+\draw[arrow] (review) |- (intent);
+\draw[arrow] (repair) -- (intent);
+\draw[arrow] (arch) |- (intent);
+
+\draw[arrow] (intent) -- (inspect);
+\draw[arrow] (inspect) -- (refs);
+\draw[arrow] (refs) -- (finding);
+
+\draw[arrow] (finding) -- node[above] {No} (clean);
+\draw[arrow] (clean) |- (converge);
+
+\draw[arrow] (finding) -- node[right] {Yes} (gate);
+\draw[arrow] (gate) -- node[above] {Fail} (defer);
+\draw[arrow] (defer) |- (converge);
+
+\draw[arrow] (gate) -- node[right] {Pass} (patch);
+\draw[arrow] (patch) -- (validate);
+\draw[arrow] (validate) -- (again);
+
+\draw[arrow] (again.west) -- ++(-28mm,0) |- node[left] {Yes, continue} (gate.west);
+\draw[arrow] (again) -- node[right] {No} (converge);
+\draw[arrow] (converge) -- (report);
+
+\draw[arrow] (refs) -- (archchecks);
+\draw[arrow] (archchecks) -- (candidate);
+\draw[arrow] (candidate.south) |- (gate.east);
+
+\end{tikzpicture}
+
+\end{document}
+```
+
 ## Severity Model
 
 Code Doctor uses a P0-P3 severity model.
