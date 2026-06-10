@@ -1,0 +1,49 @@
+{
+  "id": "python-ledger",
+  "description": "Stdlib Python ledger with intent, security, correctness, and over-edit traps.",
+  "commands": {
+    "public": "{python} -m unittest discover -s tests -p 'test_public.py'",
+    "oracle": "{python} -m unittest discover -s {oracle} -p 'test_oracle.py'"
+  },
+  "weights": {
+    "bug_found": 0.30,
+    "bug_fixed": 0.35,
+    "regression_free": 0.25,
+    "over_edit_penalty": 0.10
+  },
+  "review_targets": [
+    {
+      "id": "AUTHZ_DELETE_OWNER",
+      "must_mention": ["delete", "owner", "authorization"]
+    },
+    {
+      "id": "INCLUDE_DELETED_SCOPE",
+      "must_mention": ["include_deleted", "user", "scope"]
+    },
+    {
+      "id": "SQL_INJECTION_USER",
+      "must_mention": ["sql", "injection", "parameter"]
+    },
+    {
+      "id": "PATH_TRAVERSAL_EXPORT",
+      "must_mention": ["path", "traversal", "export"]
+    },
+    {
+      "id": "NEGATIVE_AMOUNT",
+      "must_mention": ["negative", "amount", "reject"]
+    },
+    {
+      "id": "FLOAT_MONEY",
+      "must_mention": ["float", "money", "cent"]
+    },
+    {
+      "id": "SECRET_LOGGING",
+      "must_mention": ["audit", "memo", "secret"]
+    }
+  ],
+  "repair": {
+    "allowed_files": ["ledger.py", "tests/test_public.py"],
+    "max_changed_lines": 180,
+    "forbidden_patterns": ["eval(", "exec(", "pickle.loads", "subprocess", "shell=True", "requests"]
+  }
+}

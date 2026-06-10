@@ -1,0 +1,38 @@
+{
+  "id": "go-checkout",
+  "description": "Go checkout pricing fixture with coupon ownership, expiry, and invalid item traps.",
+  "commands": {
+    "public": "go test ./...",
+    "oracle": "{python} {oracle}/run_oracle.py {candidate}"
+  },
+  "timeout_seconds": 90,
+  "weights": {
+    "bug_found": 0.30,
+    "bug_fixed": 0.35,
+    "regression_free": 0.25,
+    "over_edit_penalty": 0.10
+  },
+  "review_targets": [
+    {
+      "id": "COUPON_OWNER",
+      "must_mention": ["coupon", "owner", "user"]
+    },
+    {
+      "id": "COUPON_EXPIRY",
+      "must_mention": ["coupon", "expired", "time"]
+    },
+    {
+      "id": "COUPON_PERCENT",
+      "must_mention": ["percent", "coupon", "bounds"]
+    },
+    {
+      "id": "INVALID_ITEMS",
+      "must_mention": ["negative", "item", "quantity"]
+    }
+  ],
+  "repair": {
+    "allowed_files": ["checkout.go", "checkout_test.go"],
+    "max_changed_lines": 120,
+    "forbidden_patterns": ["panic(", "interface{}", "reflect.", "unsafe."]
+  }
+}

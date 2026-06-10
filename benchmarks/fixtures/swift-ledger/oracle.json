@@ -1,0 +1,38 @@
+{
+  "id": "swift-ledger",
+  "description": "Swift compiler fixture with owner scoping, soft delete, amount, and audit privacy traps.",
+  "commands": {
+    "public": "out=\"$(mktemp -t code-doctor-swift-public)\"; swiftc Sources/LedgerKit/Ledger.swift Tests/main.swift -o \"$out\" && \"$out\"",
+    "oracle": "{python} {oracle}/run_oracle.py {candidate}"
+  },
+  "timeout_seconds": 120,
+  "weights": {
+    "bug_found": 0.30,
+    "bug_fixed": 0.35,
+    "regression_free": 0.25,
+    "over_edit_penalty": 0.10
+  },
+  "review_targets": [
+    {
+      "id": "DELETE_OWNER",
+      "must_mention": ["delete", "owner", "authorization"]
+    },
+    {
+      "id": "INCLUDE_DELETED_SCOPE",
+      "must_mention": ["includeDeleted", "owner", "scope"]
+    },
+    {
+      "id": "NEGATIVE_AMOUNT",
+      "must_mention": ["negative", "amount", "reject"]
+    },
+    {
+      "id": "AUDIT_SECRET",
+      "must_mention": ["audit", "note", "secret"]
+    }
+  ],
+  "repair": {
+    "allowed_files": ["Sources/LedgerKit/Ledger.swift", "Tests/main.swift"],
+    "max_changed_lines": 140,
+    "forbidden_patterns": ["try!", "as!", "DispatchQueue.global"]
+  }
+}

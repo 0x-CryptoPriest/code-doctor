@@ -1,0 +1,13 @@
+AGENTS.md
+.DS_Store
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.build/
+node_modules/
+*.pyc
+*.pyo
+*.db
+*.sqlite
+*.out

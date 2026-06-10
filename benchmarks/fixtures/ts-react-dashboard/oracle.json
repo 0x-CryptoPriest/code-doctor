@@ -1,0 +1,50 @@
+{
+  "id": "ts-react-dashboard",
+  "description": "TypeScript React-style dashboard view model with tenant, XSS, mutation, and key traps.",
+  "commands": {
+    "public": "node --test tests/public.test.mjs",
+    "oracle": "node --test {oracle}/test_oracle.mjs"
+  },
+  "timeout_seconds": 60,
+  "weights": {
+    "bug_found": 0.30,
+    "bug_fixed": 0.35,
+    "regression_free": 0.25,
+    "over_edit_penalty": 0.10
+  },
+  "review_targets": [
+    {
+      "id": "TENANT_SCOPE",
+      "must_mention": ["organization", "tenant", "viewer"]
+    },
+    {
+      "id": "ADMIN_SCOPE",
+      "must_mention": ["admin", "organization", "scope"]
+    },
+    {
+      "id": "INACTIVE_USERS",
+      "must_mention": ["inactive", "hide", "user"]
+    },
+    {
+      "id": "INPUT_MUTATION",
+      "must_mention": ["mutate", "sort", "array"]
+    },
+    {
+      "id": "UNSTABLE_KEYS",
+      "must_mention": ["key", "index", "stable"]
+    },
+    {
+      "id": "XSS_DISPLAY",
+      "must_mention": ["html", "xss", "escape"]
+    },
+    {
+      "id": "OPEN_REDIRECT",
+      "must_mention": ["next", "redirect", "external"]
+    }
+  ],
+  "repair": {
+    "allowed_files": ["src/UserDashboard.ts", "tests/public.test.mjs"],
+    "max_changed_lines": 180,
+    "forbidden_patterns": ["dangerouslySetInnerHTML", "innerHTML", "eval(", "as any", "@ts-ignore"]
+  }
+}
